@@ -19,6 +19,35 @@ jest.mock('react-native', () => ({
     OS: 'ios',
     select: jest.fn((options) => options.ios),
   },
+  Animated: {
+    Value: jest.fn(function (initialValue) {
+      this._value = initialValue;
+      this.setValue = jest.fn();
+      this.getValue = jest.fn(() => this._value);
+      this.interpolate = jest.fn((config) => this._value);
+    }),
+    spring: jest.fn(() => ({
+      start: jest.fn((callback) => {
+        if (callback) callback();
+      }),
+    })),
+    timing: jest.fn(() => ({
+      start: jest.fn((callback) => {
+        if (callback) callback();
+      }),
+    })),
+    parallel: jest.fn((animations) => ({
+      start: jest.fn((callback) => {
+        if (callback) callback();
+      }),
+    })),
+    sequence: jest.fn((animations) => ({
+      start: jest.fn((callback) => {
+        if (callback) callback();
+      }),
+    })),
+    Text: 'Text',
+  },
 }));
 
 jest.mock('expo-linear-gradient', () => ({

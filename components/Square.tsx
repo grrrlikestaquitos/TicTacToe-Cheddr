@@ -1,5 +1,12 @@
-import React, { memo } from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { memo, useEffect, useRef } from 'react';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Animated,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 
 interface SquareProps {
   value: string | null;
@@ -10,10 +17,56 @@ interface SquareProps {
 
 const SquareComponent = ({ value, index, onPress, boardSize }: SquareProps) => {
   const squareSize = boardSize / 3;
+  const scaleAnim = useRef(new Animated.Value(0)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const rotateAnim = useRef(new Animated.Value(0)).current;
 
   const handlePress = React.useCallback(() => {
     onPress(index);
   }, [onPress, index]);
+
+  // Trigger animation when value changes
+  useEffect(() => {
+    if (value) {
+      // Reset and play animation
+      scaleAnim.setValue(0);
+      opacityAnim.setValue(0);
+      rotateAnim.setValue(0);
+
+      Animated.parallel([
+        Animated.spring(scaleAnim, {
+          toValue: 1,
+          useNativeDriver: true,
+          tension: 40,
+          friction: 7,
+        }),
+        Animated.timing(opacityAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(rotateAnim, {
+          toValue: 1,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [value, scaleAnim, opacityAnim, rotateAnim]);
+
+  // Interpolate rotation
+  const rotate = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
+  const animatedStyle = {
+    transform: [
+      { scale: scaleAnim },
+      { rotate },
+    ],
+    opacity: opacityAnim,
+  };
 
   return (
     <TouchableOpacity
@@ -27,9 +80,15 @@ const SquareComponent = ({ value, index, onPress, boardSize }: SquareProps) => {
       onPress={handlePress}
       activeOpacity={0.7}
     >
-      <Text style={[styles.squareText, value === 'O' && styles.squareTextO]}>
+      <Animated.Text
+        style={[
+          styles.squareText,
+          value === 'O' && styles.squareTextO,
+          animatedStyle as TextStyle,
+        ]}
+      >
         {value}
-      </Text>
+      </Animated.Text>
     </TouchableOpacity>
   );
 };
