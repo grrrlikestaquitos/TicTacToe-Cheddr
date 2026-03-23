@@ -58,7 +58,7 @@ export const validateIndex = (index: number | unknown): index is number => {
     throw new InvalidIndexError(ErrorMessages.INVALID_INDEX);
   }
 
-  if (index < 0 || index > 8) {
+  if ((index as number) < 0 || (index as number) > 8) {
     throw new InvalidIndexError(ErrorMessages.INVALID_INDEX);
   }
 
