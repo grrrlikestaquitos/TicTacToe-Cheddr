@@ -66,8 +66,6 @@ const styles = StyleSheet.create({
   },
   board: {
     marginBottom: 0,
-    borderRadius: 16,
-    overflow: 'hidden',
     backgroundColor: '#0a0e1a',
   },
   row: {
