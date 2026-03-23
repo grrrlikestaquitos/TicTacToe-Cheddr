@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -8,6 +9,7 @@ interface ResetButtonProps {
 export const ResetButton = ({ onPress }: ResetButtonProps) => {
   return (
     <TouchableOpacity
+      testID="reset-button"
       style={styles.resetButton}
       onPress={onPress}
       activeOpacity={0.85}

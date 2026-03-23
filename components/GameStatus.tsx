@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { GameStatus } from '../utils/gameLogic';
 
@@ -23,7 +24,7 @@ export const GameStatusDisplay = ({
   };
 
   return (
-    <View style={styles.statusContainer}>
+    <View testID="game-status" style={styles.statusContainer}>
       <Text style={styles.status}>{getStatusMessage()}</Text>
     </View>
   );

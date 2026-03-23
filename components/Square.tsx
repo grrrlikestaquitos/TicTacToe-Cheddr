@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 interface SquareProps {
@@ -12,6 +13,7 @@ export const Square = ({ value, index, onPress, boardSize }: SquareProps) => {
 
   return (
     <TouchableOpacity
+      testID={`square-${index}`}
       style={[
         styles.square,
         { width: squareSize, height: squareSize },

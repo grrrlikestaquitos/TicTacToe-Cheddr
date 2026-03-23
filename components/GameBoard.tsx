@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Square } from './Square';
 import { Board } from '../utils/gameLogic';
@@ -15,7 +16,7 @@ export const GameBoard = ({
 }: GameBoardProps) => {
   return (
     <View style={styles.boardWrapper}>
-      <View style={styles.board}>
+      <View testID="game-board" style={styles.board}>
         {[0, 1, 2].map((rowIndex) => (
           <View key={`row-${rowIndex}`} style={styles.row}>
             {[0, 1, 2].map((colIndex) => {
