@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -6,12 +6,16 @@ interface ResetButtonProps {
   onPress: () => void;
 }
 
-export const ResetButton = ({ onPress }: ResetButtonProps) => {
+const ResetButtonComponent = ({ onPress }: ResetButtonProps) => {
+  const handlePress = useCallback(() => {
+    onPress();
+  }, [onPress]);
+
   return (
     <TouchableOpacity
       testID="reset-button"
       style={styles.resetButton}
-      onPress={onPress}
+      onPress={handlePress}
       activeOpacity={0.85}
     >
       <LinearGradient
@@ -25,6 +29,9 @@ export const ResetButton = ({ onPress }: ResetButtonProps) => {
     </TouchableOpacity>
   );
 };
+
+// Memoize ResetButton to prevent unnecessary re-renders
+export const ResetButton = memo(ResetButtonComponent);
 
 const styles = StyleSheet.create({
   resetButton: {

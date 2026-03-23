@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -13,6 +13,9 @@ const BOARD_SIZE = Math.min(width - 40, 350);
 export default function App() {
   const { board, status, winner, currentPlayer, handleSquarePress, resetGame } =
     useGameState();
+
+  // Memoize board size calculation to prevent recalculation
+  const boardSize = useMemo(() => BOARD_SIZE, []);
 
   return (
     <LinearGradient
@@ -32,7 +35,7 @@ export default function App() {
 
         <GameBoard
           board={board}
-          boardSize={BOARD_SIZE}
+          boardSize={boardSize}
           onSquarePress={handleSquarePress}
         />
 

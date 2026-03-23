@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 interface SquareProps {
@@ -8,8 +8,12 @@ interface SquareProps {
   boardSize: number;
 }
 
-export const Square = ({ value, index, onPress, boardSize }: SquareProps) => {
+const SquareComponent = ({ value, index, onPress, boardSize }: SquareProps) => {
   const squareSize = boardSize / 3;
+
+  const handlePress = React.useCallback(() => {
+    onPress(index);
+  }, [onPress, index]);
 
   return (
     <TouchableOpacity
@@ -20,7 +24,7 @@ export const Square = ({ value, index, onPress, boardSize }: SquareProps) => {
         value === 'X' && styles.squareX,
         value === 'O' && styles.squareO,
       ]}
-      onPress={() => onPress(index)}
+      onPress={handlePress}
       activeOpacity={0.7}
     >
       <Text style={[styles.squareText, value === 'O' && styles.squareTextO]}>
@@ -29,6 +33,20 @@ export const Square = ({ value, index, onPress, boardSize }: SquareProps) => {
     </TouchableOpacity>
   );
 };
+
+// Memoize Square component with custom comparison
+// Only re-render if value, index, boardSize, or onPress reference changes
+export const Square = memo(
+  SquareComponent,
+  (prevProps, nextProps) => {
+    return (
+      prevProps.value === nextProps.value &&
+      prevProps.index === nextProps.index &&
+      prevProps.boardSize === nextProps.boardSize &&
+      prevProps.onPress === nextProps.onPress
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   square: {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   Board,
   GameStatus,
@@ -16,29 +16,33 @@ export const useGameState = () => {
   const [isXNext, setIsXNext] = useState(true);
   const [status, setStatus] = useState<GameStatus>('playing');
 
-  const winner = calculateWinner(board);
-  const currentPlayer = getNextPlayer(isXNext);
+  // Memoize computed values to avoid recalculation on every render
+  const winner = useMemo(() => calculateWinner(board), [board]);
+  const currentPlayer = useMemo(() => getNextPlayer(isXNext), [isXNext]);
 
-  const handleSquarePress = (index: number) => {
-    if (!isValidMove(board, index, winner, status)) {
-      return;
-    }
+  // Use useCallback to prevent creating new function on every render
+  // This prevents child components from re-rendering unnecessarily
+  const handleSquarePress = useCallback((index: number) => {
+    setBoard((prevBoard) => {
+      if (!isValidMove(prevBoard, index, calculateWinner(prevBoard), status)) {
+        return prevBoard;
+      }
 
-    const newBoard = makeMove(board, index, currentPlayer);
-    setBoard(newBoard);
+      const playerToMove = getNextPlayer(isXNext);
+      const newBoard = makeMove(prevBoard, index, playerToMove);
+      const newWinner = calculateWinner(newBoard);
+      const newStatus = determineGameStatus(newBoard, newWinner);
+      setStatus(newStatus);
+      setIsXNext((prev) => !prev);
+      return newBoard;
+    });
+  }, [isXNext, status]);
 
-    const newWinner = calculateWinner(newBoard);
-    const newStatus = determineGameStatus(newBoard, newWinner);
-    setStatus(newStatus);
-
-    setIsXNext(!isXNext);
-  };
-
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     setBoard(createInitialBoard());
     setIsXNext(true);
     setStatus('playing');
-  };
+  }, []);
 
   return {
     board,

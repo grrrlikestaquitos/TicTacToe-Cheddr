@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { GameStatus } from '../utils/gameLogic';
 
@@ -8,12 +8,13 @@ interface GameStatusProps {
   currentPlayer: string;
 }
 
-export const GameStatusDisplay = ({
+const GameStatusComponent = ({
   status,
   winner,
   currentPlayer,
 }: GameStatusProps) => {
-  const getStatusMessage = (): string => {
+  // Memoize status message calculation
+  const statusMessage = useMemo(() => {
     if (winner) {
       return `Player ${winner} wins! 🎉`;
     } else if (status === 'draw') {
@@ -21,14 +22,17 @@ export const GameStatusDisplay = ({
     } else {
       return `Current player: ${currentPlayer}`;
     }
-  };
+  }, [status, winner, currentPlayer]);
 
   return (
     <View testID="game-status" style={styles.statusContainer}>
-      <Text style={styles.status}>{getStatusMessage()}</Text>
+      <Text style={styles.status}>{statusMessage}</Text>
     </View>
   );
 };
+
+// Memoize GameStatusDisplay to prevent unnecessary re-renders
+export const GameStatusDisplay = memo(GameStatusComponent);
 
 const styles = StyleSheet.create({
   statusContainer: {

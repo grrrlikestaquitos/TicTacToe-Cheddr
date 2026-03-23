@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Square } from './Square';
 import { Board } from '../utils/gameLogic';
@@ -9,7 +9,7 @@ interface GameBoardProps {
   onSquarePress: (index: number) => void;
 }
 
-export const GameBoard = ({
+const GameBoardComponent = ({
   board,
   boardSize,
   onSquarePress,
@@ -37,6 +37,23 @@ export const GameBoard = ({
     </View>
   );
 };
+
+// Memoize GameBoard to prevent re-renders when parent updates
+// Only re-render if board content, boardSize, or onSquarePress reference changes
+export const GameBoard = memo(
+  GameBoardComponent,
+  (prevProps, nextProps) => {
+    // Custom comparison: check if board array content is the same
+    const boardsEqual = prevProps.board.every(
+      (val, idx) => val === nextProps.board[idx]
+    );
+    return (
+      boardsEqual &&
+      prevProps.boardSize === nextProps.boardSize &&
+      prevProps.onSquarePress === nextProps.onSquarePress
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   boardWrapper: {
