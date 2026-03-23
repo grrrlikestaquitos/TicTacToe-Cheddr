@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { useGameState } from './hooks/useGameState';
 import { GameBoard } from './components/GameBoard';
 import { GameStatusDisplay } from './components/GameStatus';
@@ -10,7 +11,7 @@ import { ResetButton } from './components/ResetButton';
 const { width } = Dimensions.get('window');
 const BOARD_SIZE = Math.min(width - 40, 350);
 
-export default function App() {
+function GameContent() {
   const { board, status, winner, currentPlayer, handleSquarePress, resetGame } =
     useGameState();
 
@@ -44,6 +45,14 @@ export default function App() {
 
       <StatusBar style="light" />
     </LinearGradient>
+  );
+}
+
+export default function App() {
+  return (
+    <ErrorBoundary>
+      <GameContent />
+    </ErrorBoundary>
   );
 }
 
