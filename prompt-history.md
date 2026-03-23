@@ -18,3 +18,4 @@
 - Can you add documentation for how this application is structured, and the file structure and visual components responsability (definitions, etc)
 - Is there anything else in this project we should think about, ex testability, optimization, etc.
 - Lets add performance optimization, such as addressing re-renders, ui memoization
+- Lets now add error handling, such as input validation, edge cases, and error boundaries, and add or update unit tests that fit these use cases
