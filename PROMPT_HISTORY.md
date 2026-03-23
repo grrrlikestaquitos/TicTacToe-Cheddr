@@ -19,3 +19,4 @@
 - Is there anything else in this project we should think about, ex testability, optimization, etc.
 - Lets add performance optimization, such as addressing re-renders, ui memoization
 - Lets now add error handling, such as input validation, edge cases, and error boundaries, and add or update unit tests that fit these use cases
+- Lets add some animations for when the tic-tac-toes get added to the board.
