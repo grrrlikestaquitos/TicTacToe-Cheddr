@@ -9,3 +9,4 @@
   Property 'barStyle' does not exist on type 'IntrinsicAttributes & StatusBarProps'.ts(2322)
 - Let's try to refactor and abstract the tic-tac-toe game, and separate the implementation into their respective components and logical functions. Think of it in a way to support unit testing and end-to-end testing.
 - Can you write thorough unit tests for the gameLogic.ts file.
+- Can you add documentation for how this application is structured, and the file structure and visual components responsability (definitions, etc)
