@@ -8,3 +8,4 @@
 - Fix the error messages with <StatusBar  barStyle .../> Type '{ barStyle: string; }' is not assignable to type 'IntrinsicAttributes & StatusBarProps'.
   Property 'barStyle' does not exist on type 'IntrinsicAttributes & StatusBarProps'.ts(2322)
 - Let's try to refactor and abstract the tic-tac-toe game, and separate the implementation into their respective components and logical functions. Think of it in a way to support unit testing and end-to-end testing.
+- Can you write thorough unit tests for the gameLogic.ts file.
