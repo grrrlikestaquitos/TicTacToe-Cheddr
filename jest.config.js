@@ -9,13 +9,21 @@ module.exports = {
         esModuleInterop: true,
         allowSyntheticDefaultImports: true,
       },
-      isolatedModules: true,
     }],
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!(react-native|@react-native|@testing-library)/)',
+  ],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+  },
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   collectCoverageFrom: [
     'utils/**/*.ts',
     'hooks/**/*.ts',
     'components/**/*.tsx',
     '!**/*.d.ts',
+    '!**/node_modules/**',
   ],
 };
