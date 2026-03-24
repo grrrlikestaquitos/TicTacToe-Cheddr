@@ -12,7 +12,7 @@ module.exports = {
     }],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|@testing-library)/)',
+    'node_modules/(?!(react-native|@react-native|@testing-library|react-native-safe-area-context)/)',
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',

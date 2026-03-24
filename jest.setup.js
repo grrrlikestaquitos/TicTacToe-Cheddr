@@ -58,5 +58,15 @@ jest.mock('expo-status-bar', () => ({
   StatusBar: 'StatusBar',
 }));
 
+jest.mock('react-native-safe-area-context', () => ({
+  SafeAreaProvider: ({ children }) => children,
+  useSafeAreaInsets: jest.fn(() => ({
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  })),
+}));
+
 // Add testing library matchers
 require('@testing-library/jest-native/extend-expect');

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Alert } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { useGameState } from './hooks/useGameState';
@@ -29,11 +30,37 @@ function GameContent() {
     // Callbacks
     handleSquarePress,
     resetGame,
+    exitGame,
     startGame,
   } = useGameState();
 
+  // Get safe area insets for notch support
+  const insets = useSafeAreaInsets();
+
   // Memoize board size calculation
   const boardSize = useMemo(() => BOARD_SIZE, []);
+
+  /**
+   * Handle exit with confirmation dialog
+   */
+  const handleExitWithConfirmation = () => {
+    Alert.alert(
+      'Exit Game',
+      'Are you sure you want to leave? You will lose the current game.',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {
+          text: 'Exit',
+          onPress: exitGame,
+          style: 'destructive',
+        },
+      ]
+    );
+  };
 
   /**
    * Show game mode selector if game hasn't been started yet
@@ -52,17 +79,23 @@ function GameContent() {
       end={{ x: 1, y: 1 }}
       style={styles.container}
     >
+      {/* Close button in top left with safe area support */}
+      <TouchableOpacity
+        style={[
+          styles.closeButton,
+          {
+            top: insets.top + 12,
+            left: insets.left + 12,
+          },
+        ]}
+        onPress={handleExitWithConfirmation}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.closeButtonText}>✕</Text>
+      </TouchableOpacity>
+
       <View style={styles.content}>
         <Text style={styles.title}>Tic-Tac-Toe</Text>
-
-        {/* Show difficulty and mode info for computer games */}
-        {gameMode === 'computer' && (
-          <View style={styles.modeInfo}>
-            <Text style={styles.modeInfoText}>
-              {humanPlayer} vs {humanPlayer === 'X' ? 'O' : 'X'} ({difficulty ? difficulty.charAt(0).toUpperCase() + difficulty.slice(1) : 'Hard'})
-            </Text>
-          </View>
-        )}
 
         <GameStatusDisplay
           status={status}
@@ -101,6 +134,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
   },
   content: {
     alignItems: 'center',
@@ -131,5 +165,30 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#00d4ff',
     letterSpacing: 0.5,
+  },
+  buttonContainer: {
+    marginTop: 20,
+    flexDirection: 'row',
+    gap: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: 'rgba(255, 107, 107, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  closeButtonText: {
+    fontSize: 32,
+    fontWeight: '300',
+    color: '#ff6b6b',
+    lineHeight: 32,
   },
 });

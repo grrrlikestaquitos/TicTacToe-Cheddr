@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GameMode, ComputerDifficulty } from '../hooks/useGameState';
 
@@ -13,6 +14,9 @@ export const GameModeSelector: React.FC<GameModeSelectorProps> = ({
   const [selectedMode, setSelectedMode] = useState<GameMode | null>(null);
   const [selectedPlayer, setSelectedPlayer] = useState<'X' | 'O' | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<ComputerDifficulty | null>(null);
+
+  // Get safe area insets for notch support
+  const insets = useSafeAreaInsets();
 
   /**
    * Start PvP game (no difficulty selection needed)
@@ -98,10 +102,6 @@ export const GameModeSelector: React.FC<GameModeSelectorProps> = ({
         {/* Computer Mode - Choose Player Symbol */}
         {selectedMode === 'computer' && selectedPlayer === null && (
           <View style={styles.menuScreen}>
-            <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-              <Text style={styles.backButtonText}>← Back</Text>
-            </TouchableOpacity>
-
             <Text style={styles.title}>Choose Your Symbol</Text>
             <Text style={styles.subtitle}>Who goes first?</Text>
 
@@ -130,10 +130,6 @@ export const GameModeSelector: React.FC<GameModeSelectorProps> = ({
         {/* Computer Mode - Choose Difficulty */}
         {selectedMode === 'computer' && selectedPlayer !== null && (
           <View style={styles.menuScreen}>
-            <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-              <Text style={styles.backButtonText}>← Back</Text>
-            </TouchableOpacity>
-
             <Text style={styles.title}>Difficulty Level</Text>
             <Text style={styles.subtitle}>Playing as: {selectedPlayer}</Text>
 
@@ -168,6 +164,23 @@ export const GameModeSelector: React.FC<GameModeSelectorProps> = ({
           </View>
         )}
       </ScrollView>
+
+      {/* Back button positioned at top level for proper placement */}
+      {(selectedMode === 'computer' && selectedPlayer === null) ||
+       (selectedMode === 'computer' && selectedPlayer !== null) ? (
+        <TouchableOpacity
+          style={[
+            styles.backButton,
+            {
+              top: insets.top + 12,
+              left: insets.left + 12,
+            },
+          ]}
+          onPress={handleBack}
+        >
+          <Text style={styles.backButtonText}>← Back</Text>
+        </TouchableOpacity>
+      ) : null}
     </LinearGradient>
   );
 };
@@ -191,8 +204,6 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 0,
-    left: 0,
     paddingHorizontal: 16,
     paddingVertical: 12,
     zIndex: 10,

@@ -32,6 +32,7 @@ export interface GameState {
   // Callbacks
   handleSquarePress: (index: number) => void;
   resetGame: () => void;
+  exitGame: () => void;
   startGame: (mode: GameMode, humanPlayer?: Player, difficulty?: ComputerDifficulty) => void;
 }
 
@@ -215,6 +216,21 @@ export const useGameState = (): GameState => {
     processingComputerMoveRef.current = false;
   }, []);
 
+  /**
+   * Exit the game and return to mode selection
+   * Resets all game state and mode settings
+   */
+  const exitGame = useCallback(() => {
+    setBoard(createInitialBoard());
+    setIsXNext(true);
+    setStatus('playing');
+    setGameMode(null);
+    setHumanPlayer(null);
+    setDifficulty('easy');
+    setIsComputerThinking(false);
+    processingComputerMoveRef.current = false;
+  }, []);
+
   return {
     // Board state
     board,
@@ -232,6 +248,7 @@ export const useGameState = (): GameState => {
     // Callbacks
     handleSquarePress,
     resetGame,
+    exitGame,
     startGame,
   };
 };
