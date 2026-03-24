@@ -68,7 +68,12 @@ export const GameModeSelector: React.FC<GameModeSelectorProps> = ({
       style={styles.container}
     >
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          ((selectedMode === 'computer' && selectedPlayer === null) ||
+           (selectedMode === 'computer' && selectedPlayer !== null)) && 
+          styles.scrollContentWithBackButton
+        ]}
         showsVerticalScrollIndicator={false}
       >
         {/* Main Menu - Choose PvP or Computer */}
@@ -188,15 +193,17 @@ export const GameModeSelector: React.FC<GameModeSelectorProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 40,
+    paddingTop: 120, // Generous top padding for better visual balance
+    paddingBottom: 40,
+  },
+  scrollContentWithBackButton: {
+    paddingTop: 160, // Even more top padding when back button is present
   },
   menuScreen: {
     width: '100%',
@@ -217,7 +224,7 @@ const styles = StyleSheet.create({
     fontSize: 52,
     fontWeight: '900',
     color: '#fff',
-    marginBottom: 8,
+    marginBottom: 16,
     letterSpacing: 2,
     textShadowColor: '#00d4ff',
     textShadowOffset: { width: 0, height: 2 },
@@ -227,8 +234,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: '#a8a8c8',
-    marginBottom: 40,
+    marginBottom: 60,
     letterSpacing: 0.5,
+    textAlign: 'center',
   },
   buttonContainer: {
     width: '100%',
