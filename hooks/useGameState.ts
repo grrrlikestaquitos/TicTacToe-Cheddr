@@ -26,7 +26,7 @@ export interface GameState {
   // Game mode state
   gameMode: GameMode | null; // null until mode is selected
   humanPlayer: Player | null; // X or O, null if not set
-  difficulty: ComputerDifficulty | null; // easy, medium, hard, null if not set
+  difficulty: ComputerDifficulty; // easy, medium, hard
   isComputerThinking: boolean;
 
   // Callbacks
@@ -44,7 +44,7 @@ export const useGameState = (): GameState => {
   // Game mode state
   const [gameMode, setGameMode] = useState<GameMode | null>(null);
   const [humanPlayer, setHumanPlayer] = useState<Player | null>(null);
-  const [difficulty, setDifficulty] = useState<ComputerDifficulty | null>(null);
+  const [difficulty, setDifficulty] = useState<ComputerDifficulty>('easy');
   const [isComputerThinking, setIsComputerThinking] = useState(false);
 
   // Ref to track if we're processing a computer move (prevent race conditions)
@@ -189,7 +189,7 @@ export const useGameState = (): GameState => {
         // Player vs Player: no AI
         setGameMode('pvp');
         setHumanPlayer(null);
-        setDifficulty(null);
+        setDifficulty('easy'); // Default difficulty, not used in PvP
       } else {
         // Player vs Computer: set up AI
         setGameMode('computer');

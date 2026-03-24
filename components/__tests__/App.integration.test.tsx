@@ -7,6 +7,9 @@ describe('App Integration Tests', () => {
     it('should handle a complete game where X wins', () => {
       const { getByTestId, getByText } = render(<App />);
 
+      // First, select PvP mode
+      fireEvent.press(getByText(/Player vs Player/));
+
       // X plays at position 0 (top-left)
       fireEvent.press(getByTestId('square-0'));
       expect(getByText(/Current player: O/)).toBeTruthy();
@@ -31,6 +34,9 @@ describe('App Integration Tests', () => {
     it('should prevent moves after game is won', () => {
       const { getByTestId, getByText, queryByText } = render(<App />);
 
+      // First, select PvP mode
+      fireEvent.press(getByText(/Player vs Player/));
+
       // X wins on top row
       fireEvent.press(getByTestId('square-0'));
       fireEvent.press(getByTestId('square-3'));
@@ -50,6 +56,9 @@ describe('App Integration Tests', () => {
     it('should prevent moves on occupied squares', () => {
       const { getByTestId, getByText } = render(<App />);
 
+      // First, select PvP mode
+      fireEvent.press(getByText(/Player vs Player/));
+
       fireEvent.press(getByTestId('square-0'));
       expect(getByText(/Current player: O/)).toBeTruthy();
 
@@ -64,6 +73,9 @@ describe('App Integration Tests', () => {
   describe('Reset Functionality', () => {
     it('should reset game to initial state', () => {
       const { getByTestId, getByText } = render(<App />);
+
+      // First, select PvP mode
+      fireEvent.press(getByText(/Player vs Player/));
 
       // Play some moves
       fireEvent.press(getByTestId('square-0'));
@@ -85,6 +97,9 @@ describe('App Integration Tests', () => {
 
     it('should reset after a win', () => {
       const { getByTestId, getByText } = render(<App />);
+
+      // First, select PvP mode
+      fireEvent.press(getByText(/Player vs Player/));
 
       // X wins
       fireEvent.press(getByTestId('square-0'));
@@ -110,17 +125,23 @@ describe('App Integration Tests', () => {
     });
 
     it('should always display status', () => {
-      const { getByTestId } = render(<App />);
+      const { getByTestId, getByText } = render(<App />);
+      // First, select PvP mode to see the game status
+      fireEvent.press(getByText(/Player vs Player/));
       expect(getByTestId('game-status')).toBeTruthy();
     });
 
     it('should always display board', () => {
-      const { getByTestId } = render(<App />);
+      const { getByTestId, getByText } = render(<App />);
+      // First, select PvP mode to see the board
+      fireEvent.press(getByText(/Player vs Player/));
       expect(getByTestId('game-board')).toBeTruthy();
     });
 
     it('should always display reset button', () => {
-      const { getByTestId } = render(<App />);
+      const { getByTestId, getByText } = render(<App />);
+      // First, select PvP mode to see the reset button
+      fireEvent.press(getByText(/Player vs Player/));
       expect(getByTestId('reset-button')).toBeTruthy();
     });
   });
@@ -128,6 +149,9 @@ describe('App Integration Tests', () => {
   describe('Alternating Turns', () => {
     it('should correctly alternate between X and O', () => {
       const { getByTestId, getByText } = render(<App />);
+
+      // First, select PvP mode
+      fireEvent.press(getByText(/Player vs Player/));
 
       expect(getByText(/Current player: X/)).toBeTruthy();
 

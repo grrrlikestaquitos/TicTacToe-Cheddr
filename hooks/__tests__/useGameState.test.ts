@@ -5,7 +5,7 @@ import { useGameState } from '../useGameState';
 jest.mock('../../utils/aiEngine', () => ({
   getComputerMove: jest.fn((board, difficulty, humanPlayer) => {
     // Simple mock: return first available position
-    return board.findIndex((cell) => cell === null);
+    return board.findIndex((cell: string | null) => cell === null);
   }),
 }));
 
@@ -28,14 +28,14 @@ describe('useGameState - Extended with AI', () => {
 
       expect(result.current.gameMode).toBeNull();
       expect(result.current.humanPlayer).toBeNull();
-      expect(result.current.difficulty).toBeNull();
+      expect(result.current.difficulty).toBe('easy');
       expect(result.current.isComputerThinking).toBe(false);
     });
 
     it('should have empty board on initial state', () => {
       const { result } = renderHook(() => useGameState());
 
-      expect(result.current.board.every((cell) => cell === null)).toBe(true);
+      expect(result.current.board.every((cell: string | null) => cell === null)).toBe(true);
       expect(result.current.status).toBe('playing');
     });
 
@@ -57,7 +57,7 @@ describe('useGameState - Extended with AI', () => {
 
       expect(result.current.gameMode).toBe('pvp');
       expect(result.current.humanPlayer).toBeNull();
-      expect(result.current.difficulty).toBeNull();
+      expect(result.current.difficulty).toBe('easy');
     });
 
     it('should initialize computer mode with human player X', () => {
@@ -148,7 +148,7 @@ describe('useGameState - Extended with AI', () => {
       // Verify PvP mode is set
       expect(result.current.gameMode).toBe('pvp');
       expect(result.current.humanPlayer).toBeNull();
-      expect(result.current.difficulty).toBeNull();
+      expect(result.current.difficulty).toBe('easy');
       expect(result.current.status).toBe('playing');
       expect(result.current.currentPlayer).toBe('X');
     });
@@ -498,9 +498,9 @@ describe('useGameState - Extended with AI', () => {
       expect(typeof state.status).toBe('string');
       expect(typeof state.winner).toBe('object');
       expect(typeof state.currentPlayer).toBe('string');
-      expect(typeof state.gameMode).toBe('object');
-      expect(typeof state.humanPlayer).toBe('object');
-      expect(typeof state.difficulty).toBe('object');
+      expect(state.gameMode === null || typeof state.gameMode === 'string').toBe(true);
+      expect(state.humanPlayer === null || typeof state.humanPlayer === 'string').toBe(true);
+      expect(typeof state.difficulty).toBe('string');
       expect(typeof state.isComputerThinking).toBe('boolean');
       expect(typeof state.handleSquarePress).toBe('function');
       expect(typeof state.resetGame).toBe('function');
