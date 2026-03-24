@@ -22,3 +22,4 @@
 - Lets add some animations for when the tic-tac-toes get added to the board.
 - I received additional requirements, the game is meant to be played as a single player instead of between two people. Meaning, there needs to be a computer vs actual user mechanism. What should we modify and consider to adapt to our current infrastructure.
 - Can you go ahead and implement phase 1 first.
+- Let's proceed with Phase 2; extend state hook.
